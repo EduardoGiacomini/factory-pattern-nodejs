@@ -10,8 +10,6 @@ function createCore(configurations = {}) {
     database.start();
     webserver.start();
     console.log('[core] Starting done! System running!');
-
-    throw new Error('intentional error');
   }
 
   function stop() {
