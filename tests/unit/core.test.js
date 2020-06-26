@@ -1,10 +1,21 @@
 const createCore = require('../../src/core');
 
-// Este teste de unidade foi criado a fim de testar apenas
-// a unidade #core, porém, como é possível observar nos logs
-// que todo o sistema é carregado. O que não é desejável para um
-// teste de unidade visto que queremos testar apenas o módulo
-// #core e desejamos que isso seja o mais rápido possível.
+// Criando função responsável por "imitar" a factory database
+// e webserver.
+function createMock() {
+  function start() {
+    console.log('[mock] ...');
+  }
+
+  function stop() {
+    console.log('[mock] ...');
+  }
+
+  return {
+    start,
+    stop
+  }
+}
 
 describe('Core quando importado', () => {
   test('deve ter o método #start e #stop', () => {
@@ -16,7 +27,16 @@ describe('Core quando importado', () => {
 
 describe('Core quando inicializado', () => {
   test('não deve retornar erros', () =>   {
-    const core = createCore();
+    // Podemos criar instâncias desse mock, e assim isolar
+    // por completo o módulo core do sistema.
+    const databaseMock = createMock();
+    const webserverMock = createMock();
+
+    const core = createCore({
+      database: databaseMock,
+      webserver: webserverMock
+    });
+
     expect(() => {
       core.start();
     }).not.toThrow();
